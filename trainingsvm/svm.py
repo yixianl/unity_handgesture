@@ -1,6 +1,7 @@
 import numpy as np
 import cv2 as cv
 import pandas as pd
+import pickle
 
 featureData = pd.read_csv('FeatureVector.txt', sep=" ", header=None, usecols = range(20))
 
@@ -29,8 +30,17 @@ from sklearn.svm import SVC
 svclassifier = SVC(kernel='linear')
 svclassifier.fit(X_train, y_train)
 
+#save model
+filename = 'finalized_model.sav'
+pickle.dump(svclassifier, open(filename, 'wb'))
+
+#load the model
+model = pickle.load(open(filename, 'rb'))
+
+y_pred = model.predict(X_test)
+
 #makeing predictions
-y_pred = svclassifier.predict(X_test)
+#y_pred = svclassifier.predict(X_test)
 
 #evaluate the algorithm
 from sklearn.metrics import classification_report, confusion_matrix
